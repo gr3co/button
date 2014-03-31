@@ -1,0 +1,26 @@
+{
+  "name": "button-server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node --harmony app-forever.js"
+  },
+  "dependencies": {
+    "connect-mongo": "*",
+    "connect-flash": "*",
+    "crypto" : "*",
+    "express": "3.x",
+    "express3-handlebars": "*",
+    "express-slash": "*",
+    "express-validator": "*",
+    "forever-monitor": "*",
+    "mongoose": "*",
+    "node-sass": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "passport.socketio" : "*",
+    "socket.io": "*",
+    "socket.io-stream": "*",
+    "underscore": "*"
+  }
+}

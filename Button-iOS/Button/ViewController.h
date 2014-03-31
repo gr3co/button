@@ -8,12 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import <Social/Social.h>
+#import <CoreLocation/CoreLocation.h>
 
 
-@interface ViewController : UIViewController {
+@interface ViewController : UIViewController <CLLocationManagerDelegate> {
     UIButton *theButton;
     UIButton *fbShareButton;
     UIButton *twitterButton;
+    CLLocationManager *locationManager;
+    CLLocation *currentLocation;
 }
 
 @end
