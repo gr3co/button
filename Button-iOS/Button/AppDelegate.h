@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ButtonViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

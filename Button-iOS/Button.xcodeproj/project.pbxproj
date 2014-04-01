@@ -13,7 +13,7 @@
 		A854B51318EA022300EAC26C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A854B51118EA022300EAC26C /* InfoPlist.strings */; };
 		A854B51518EA022300EAC26C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A854B51418EA022300EAC26C /* main.m */; };
 		A854B51918EA022300EAC26C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A854B51818EA022300EAC26C /* AppDelegate.m */; };
-		A854B52218EA022300EAC26C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A854B52118EA022300EAC26C /* ViewController.m */; };
+		A854B52218EA022300EAC26C /* ButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A854B52118EA022300EAC26C /* ButtonViewController.m */; };
 		A854B52418EA022300EAC26C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A854B52318EA022300EAC26C /* Images.xcassets */; };
 		A854B52B18EA022300EAC26C /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A854B52A18EA022300EAC26C /* XCTest.framework */; };
 		A854B52C18EA022300EAC26C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A854B50818EA022300EAC26C /* Foundation.framework */; };
@@ -49,8 +49,8 @@
 		A854B51618EA022300EAC26C /* Button-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Button-Prefix.pch"; sourceTree = "<group>"; };
 		A854B51718EA022300EAC26C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A854B51818EA022300EAC26C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		A854B52018EA022300EAC26C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		A854B52118EA022300EAC26C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A854B52018EA022300EAC26C /* ButtonViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ButtonViewController.h; sourceTree = "<group>"; };
+		A854B52118EA022300EAC26C /* ButtonViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ButtonViewController.m; sourceTree = "<group>"; };
 		A854B52318EA022300EAC26C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A854B52918EA022300EAC26C /* ButtonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ButtonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A854B52A18EA022300EAC26C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -134,13 +134,13 @@
 		A854B50E18EA022300EAC26C /* Button */ = {
 			isa = PBXGroup;
 			children = (
-				A854B54C18EA05F700EAC26C /* Images */,
 				A854B51718EA022300EAC26C /* AppDelegate.h */,
 				A854B51818EA022300EAC26C /* AppDelegate.m */,
-				A854B52018EA022300EAC26C /* ViewController.h */,
-				A854B52118EA022300EAC26C /* ViewController.m */,
-				A854B52318EA022300EAC26C /* Images.xcassets */,
+				A854B52018EA022300EAC26C /* ButtonViewController.h */,
+				A854B52118EA022300EAC26C /* ButtonViewController.m */,
+				A854B54C18EA05F700EAC26C /* Images */,
 				A854B50F18EA022300EAC26C /* Supporting Files */,
+				A854B52318EA022300EAC26C /* Images.xcassets */,
 			);
 			path = Button;
 			sourceTree = "<group>";
@@ -287,7 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A854B52218EA022300EAC26C /* ViewController.m in Sources */,
+				A854B52218EA022300EAC26C /* ButtonViewController.m in Sources */,
 				A854B51918EA022300EAC26C /* AppDelegate.m in Sources */,
 				A854B51518EA022300EAC26C /* main.m in Sources */,
 			);

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Stephen Greco. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "ButtonViewController.h"
 
 @interface ViewController ()
 
@@ -17,6 +17,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    
+    scroll.pagingEnabled = YES;
+    scroll.scrollsToTop=YES;
+    //scroll.
+    /* Programmatically generate scrollable views
+     NSInteger numberOfViews = 3;
+     for (int i = 0; i < numberOfViews; i++) {
+     CGFloat xOrigin = i * self.view.frame.size.width;
+     UIView *awesomeView = [[UIView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.view.frame.size.width, self.view.frame.size.height)];
+     awesomeView.backgroundColor = [UIColor colorWithRed:0.5/i green:0.5 blue:0.5 alpha:1];
+     [scroll addSubview:awesomeView];
+     }*/
+    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-100);
+    self.view =scroll;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     locationManager = [[CLLocationManager alloc] init];
     locationManager.delegate = self;
@@ -35,16 +52,48 @@
     theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2,
                                  buttonWidth, buttonWidth);
     [theButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
+    [theButton setBackgroundImage:buttonBackground forState:UIControlStateSelected];
+    [theButton setBackgroundImage:buttonBackground forState:UIControlStateHighlighted];
     [theButton addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:theButton];
-}
+    [scroll addSubview:theButton];
+    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    UIView *mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-100)];
+    [secondView addSubview:mapView];
+    [scroll addSubview:secondView];
+    //PAN GESTURE IS USELESS CURRENTLY
+    UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
+    panGesture.edges = UIRectEdgeLeft;
+    [scroll addGestureRecognizer:panGesture];
 
+    //[self.view = [MKMapView alloc]init];
+    //MKMapView * mapView = (MKMapView *)self.view;
+    //mapView.mapType = MKMapTypeSatellite;
+    
+}
+- (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
+    NSLog(@"Pan Gesture Called");
+/*
+    UIView *view = [self.view hitTest:[gesture locationInView:gesture.view] withEvent:nil];
+    if(UIGestureRecognizerStateBegan == gesture.state ||
+       UIGestureRecognizerStateChanged == gesture.state) {
+        CGPoint translation = [gesture translationInView:gesture.view];
+        // Move the view's center using the gesture
+        self.view.center = CGPointMake(_centerX + translation.x, view.center.y);
+    } else {// cancel, fail, or ended
+        // Animate back to center x
+        [UIView animateWithDuration:.3 animations:^{
+            view.center = CGPointMake(_centerX, view.center.y);
+        }];
+    }*/
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
 - (IBAction)sendLocation{
+    NSLog(@"sendLocation currently deactivated");
+    return;
     if (currentLocation == nil){
         NSLog(@"location not set");
         return;
