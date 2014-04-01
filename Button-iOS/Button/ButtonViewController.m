@@ -111,6 +111,13 @@
 }
 
 -(void)toggleTracking{
+    if(!toggleTracking)
+    {
+        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
+        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+        [mapView setRegion:adjustedRegion animated:YES];
+    }
     toggleTracking= !toggleTracking;
 //    if ([mapView showsUserLocation]) {
 //        [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
@@ -124,7 +131,14 @@
     if(toggleTracking==false)
         return;
     if ([mapView showsUserLocation]) {
-        [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
+        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
+        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+        [mapView setRegion:adjustedRegion animated:YES];
+//        [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
+//        [mapView setRegion:[mapView regionThatFits:viewRegion]];
+
+        //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
 
         //r[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
         // [mapView setCenterCoordinate:mapView.userLocation.location.coordinate zoomLevel:14 animated:YES];        // and of course you can use here old and new location values
