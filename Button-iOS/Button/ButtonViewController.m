@@ -102,16 +102,23 @@
         NSLog(@"location not set");
         return;
     }
-    
-    float longitude = currentLocation.coordinate.longitude;
-    float latitude = currentLocation.coordinate.latitude;
+    NSNumber *longitude = [NSNumber numberWithFloat:currentLocation.coordinate.longitude];
+    NSNumber *latitude = [NSNumber numberWithFloat:currentLocation.coordinate.latitude];
     NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&idnum=%@",longitude,latitude, identifier];
-    NSString *url = @"http://bonerbutton.com/api/sendLocation";
-    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
+    NSDictionary *tmpDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                             longitude, @"lng",
+                             latitude, @"lat",
+                             identifier, @"idnum",
+                             nil];
+    NSError *error;
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:tmpDict options:0 error:&error];
+    NSURL *serverAddr = [NSURL URLWithString:@"http://bonerbutton.com/api/sendLocation"];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request setHTTPMethod:@"GET"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:[NSString stringWithFormat:@"%ld", [postData length]] forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:postData];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     [connection start];
 }
