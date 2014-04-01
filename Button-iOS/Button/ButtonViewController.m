@@ -23,7 +23,6 @@
     [super viewDidLoad];
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    
     scroll.pagingEnabled = YES;
     scroll.scrollsToTop=YES;
     //scroll.
@@ -128,6 +127,8 @@
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
+    MapPin * testPin = [[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate placeName:@"asdf" description:@"test"];
+    [mapView addAnnotation:testPin];
     if(toggleTracking==false)
         return;
     if ([mapView showsUserLocation]) {

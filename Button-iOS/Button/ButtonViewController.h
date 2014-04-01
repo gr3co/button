@@ -10,6 +10,7 @@
 #import <Social/Social.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+#import "MapPin.h"
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate> {
     UIButton *theButton;

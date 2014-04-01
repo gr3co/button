@@ -26,6 +26,7 @@
 		A854B54918EA04AC00EAC26C /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A854B54818EA04AC00EAC26C /* iAd.framework */; };
 		A854B54B18EA04E500EAC26C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A854B54A18EA04E500EAC26C /* CoreData.framework */; };
 		A854B54E18EA05F700EAC26C /* bubble_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A854B54D18EA05F700EAC26C /* bubble_icon.png */; };
+		A9F1357318EA785700001E6F /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F1357218EA785700001E6F /* MapPin.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		A854B54818EA04AC00EAC26C /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		A854B54A18EA04E500EAC26C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A854B54D18EA05F700EAC26C /* bubble_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble_icon.png; sourceTree = "<group>"; };
+		A9F1357118EA785700001E6F /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
+		A9F1357218EA785700001E6F /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +141,8 @@
 				A854B51818EA022300EAC26C /* AppDelegate.m */,
 				A854B52018EA022300EAC26C /* ButtonViewController.h */,
 				A854B52118EA022300EAC26C /* ButtonViewController.m */,
+				A9F1357118EA785700001E6F /* MapPin.h */,
+				A9F1357218EA785700001E6F /* MapPin.m */,
 				A854B54C18EA05F700EAC26C /* Images */,
 				A854B50F18EA022300EAC26C /* Supporting Files */,
 				A854B52318EA022300EAC26C /* Images.xcassets */,
@@ -287,6 +292,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9F1357318EA785700001E6F /* MapPin.m in Sources */,
 				A854B52218EA022300EAC26C /* ButtonViewController.m in Sources */,
 				A854B51918EA022300EAC26C /* AppDelegate.m in Sources */,
 				A854B51518EA022300EAC26C /* main.m in Sources */,
