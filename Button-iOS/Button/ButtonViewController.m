@@ -9,6 +9,9 @@
 #import "ButtonViewController.h"
 
 @interface ViewController ()
+{
+    MKMapView * mapView;
+}
 
 @end
 
@@ -31,8 +34,8 @@
      awesomeView.backgroundColor = [UIColor colorWithRed:0.5/i green:0.5 blue:0.5 alpha:1];
      [scroll addSubview:awesomeView];
      }*/
-    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-100);
-    self.view =scroll;
+    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-20);
+    self.view = scroll;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     locationManager = [[CLLocationManager alloc] init];
@@ -56,10 +59,28 @@
     [theButton setBackgroundImage:buttonBackground forState:UIControlStateHighlighted];
     [theButton addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
     [scroll addSubview:theButton];
+    
     UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    UIView *mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-100)];
+    mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-100)];
+    mapView.delegate=self;
+    
+    //CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
+    //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+    //MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+    //[mapView setRegion:adjustedRegion animated:YES];
+    //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
+    //[mapView setRegion:[mapView regionThatFits:viewRegion]];
+    mapView.showsUserLocation = YES;
+    //[mapView setDelegate:self];
+    mapView.showsUserLocation=YES;
+//    [mapView showsUserLocation];
+    [mapView.userLocation addObserver:self
+                                forKeyPath:@"location"
+                                   options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld)
+                                   context:NULL];
     [secondView addSubview:mapView];
     [scroll addSubview:secondView];
+    [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
     //PAN GESTURE IS USELESS CURRENTLY
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
@@ -70,6 +91,18 @@
     //mapView.mapType = MKMapTypeSatellite;
     
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    return;
+    if ([mapView showsUserLocation]) {
+        [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
+// [mapView setCenterCoordinate:mapView.userLocation.location.coordinate zoomLevel:14 animated:YES];        // and of course you can use here old and new location values
+   }
+}
+
 - (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
     NSLog(@"Pan Gesture Called");
 /*
@@ -92,6 +125,7 @@
 }
 
 - (IBAction)sendLocation{
+    [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
     NSLog(@"sendLocation currently deactivated");
     return;
     if (currentLocation == nil){

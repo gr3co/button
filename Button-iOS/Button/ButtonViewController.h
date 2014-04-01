@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
-@interface ViewController : UIViewController <CLLocationManagerDelegate> {
+@interface ViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate> {
     UIButton *theButton;
     UIButton *fbShareButton;
     UIButton *twitterButton;
