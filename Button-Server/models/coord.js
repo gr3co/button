@@ -8,7 +8,7 @@ var coordSchema = new Schema({
 });
 
 coordSchema.statics.lookupByRadius = function(lat, lon, radius, next){
-  this.find({coords: {$geoWithin : {$center : [[lat, lon], radius]}}}).exec(next);
+  this.find({coords: {$geoWithin : {$center : [[lon, lat], radius]}}}).exec(next);
 };
 
 module.exports = mongoose.model('Coord', coordSchema, 'boners');
