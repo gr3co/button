@@ -13,6 +13,7 @@
 @synthesize coordinate;
 @synthesize title;
 @synthesize subtitle;
+@synthesize bonerTime;
 
 - (id)initWithCoordinates:(CLLocationCoordinate2D)location placeName:placeName description:description {
     self = [super init];
