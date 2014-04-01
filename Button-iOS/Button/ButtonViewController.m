@@ -116,7 +116,8 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:[NSString stringWithFormat:@"%ld", [postData length]] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:[NSString stringWithFormat:@"%ld", (unsigned long)[postData length]]
+                        forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:postData];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -182,6 +183,22 @@
         [mapView setRegion:adjustedRegion animated:YES];
     }
     toggleTracking= !toggleTracking;
+    
+    
+    //request list of boners
+    float longitude = currentLocation.coordinate.longitude;
+    float latitude = currentLocation.coordinate.latitude;
+    float radius = 10;
+    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
+                        longitude,latitude, radius, identifier];
+    NSString *url = @"http://bonerbutton.com/api/getboners";
+    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPMethod:@"GET"];
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    [connection start];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

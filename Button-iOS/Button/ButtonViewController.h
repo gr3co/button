@@ -19,6 +19,7 @@
     CLLocationManager *locationManager;
     CLLocation *currentLocation;
     MKMapView * mapView;
+    NSMutableArray *coords;
     BOOL toggleTracking;
 }
 
