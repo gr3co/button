@@ -21,6 +21,12 @@
     [self setUpUI];
 }
 
+//if i understand this shit correctly, wich i probably dont...
+//this method is called every time an annotation object is added
+//by checking properties of the (MapPin) annotation that it takes
+//we can color them according to annotation.bonerTime or [annotation getBonerTime]
+//we canalso draw pins from image files insteads of using colors
+//ther are only three colors; green red blue
 - (MKAnnotationView *) mapView:(MKMapView *)mapView
              viewForAnnotation:(MapPin <MKAnnotation>*) annotation {
     MKPinAnnotationView *annView=[[MKPinAnnotationView alloc]
