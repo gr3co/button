@@ -97,8 +97,7 @@
 
 - (IBAction)sendLocation{
     //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-    NSLog(@"sendLocation currently deactivated");
-    return;
+
     if (currentLocation == nil){
         NSLog(@"location not set");
         return;
@@ -111,11 +110,11 @@
                          nil];
     NSError *error;
     NSData *postData = [NSJSONSerialization dataWithJSONObject:tmpDict options:0 error:&error];
-    NSURL *serverAddr = [NSURL URLWithString:@"http://192.168.1.112:3000/api/sendLocation"];
+    NSURL *serverAddr = [NSURL URLWithString:@"http://bonerbutton.com/api/sendLocation"];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:[NSString stringWithFormat:@"%d", [postData length]] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:[NSString stringWithFormat:@"%ld", [postData length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:postData];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
