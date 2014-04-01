@@ -134,9 +134,22 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     NSError *error = nil;
-    NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    NSLog(@"%@", jsonArray);
+    NSDictionary *parsedData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    int status = [[parsedData objectForKey:@"status"] intValue];
+    id response = [parsedData objectForKey:@"data"];
+    if (status != 200){
+        NSLog(@"error: %@", response);
+        return;
+    }
+    if ([response isKindOfClass:[NSString class]]){
+        NSLog(@"response: %@", response);
+        return;
+    }
+    if ([response isKindOfClass:[NSArray class]]){
+        [self handleCoords: response];
+    }
 }
+
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"")
@@ -156,6 +169,17 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
 }
+
+-(void)handleCoords:(NSArray*)data{
+    [coords removeAllObjects];
+    for (NSDictionary *d in data){
+        float lng = [[d objectForKey:@"lng"] floatValue];
+        float lat = [[d objectForKey:@"lat"] floatValue];
+        CLLocation *coord = [[CLLocation alloc] initWithLatitude:lat longitude:lng];
+        [coords addObject:coord];
+    }
+}
+
 
 - (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
     NSLog(@"Pan Gesture Called (DOES NOTHING)");
