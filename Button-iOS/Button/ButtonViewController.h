@@ -18,6 +18,8 @@
     UIButton *twitterButton;
     CLLocationManager *locationManager;
     CLLocation *currentLocation;
+    MKMapView * mapView;
+    BOOL toggleTracking;
 }
 
 @end

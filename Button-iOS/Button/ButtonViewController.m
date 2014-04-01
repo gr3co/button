@@ -9,10 +9,6 @@
 #import "ButtonViewController.h"
 
 @interface ViewController ()
-{
-    MKMapView * mapView;
-    BOOL toggleTracking;
-}
 
 @end
 
@@ -21,28 +17,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    [self setUpLocation];
+    [self setUpUI];
+}
+
+-(void) setUpUI
+{
     UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     scroll.pagingEnabled = YES;
     scroll.scrollsToTop=YES;
-    //scroll.
-    /* Programmatically generate scrollable views
-     NSInteger numberOfViews = 3;
-     for (int i = 0; i < numberOfViews; i++) {
-     CGFloat xOrigin = i * self.view.frame.size.width;
-     UIView *awesomeView = [[UIView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.view.frame.size.width, self.view.frame.size.height)];
-     awesomeView.backgroundColor = [UIColor colorWithRed:0.5/i green:0.5 blue:0.5 alpha:1];
-     [scroll addSubview:awesomeView];
-     }*/
     scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-20);
     self.view = scroll;
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    locationManager.distanceFilter = kCLDistanceFilterNone;
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [locationManager startUpdatingLocation];
     
 	self.view.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:1.0 alpha:1.0];
     UIImage *buttonBackground = [UIImage imageNamed:@"bubble_icon.png"];
@@ -50,9 +35,6 @@
     float width = self.view.bounds.size.width;
     float height = self.view.bounds.size.height;
     float buttonWidth = width / 2;
-    
-
-    
     
     theButton = [UIButton buttonWithType:UIButtonTypeSystem];
     theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2,
@@ -68,104 +50,29 @@
     mapView.delegate=self;
     
     UIButton* trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-
-    //trackButton.center = CGPointMake(100, 100);
-    //trackButton.center = CGPointMake(self.view.frame.size.width-10, self.view.frame.size.height);
     trackButton.frame = CGRectMake(self.view.frame.size.width-65,self.view.frame.size.height-87.5,
                                    50, 50);
     [trackButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
     [trackButton addTarget:self action:@selector(toggleTracking) forControlEvents:UIControlEventTouchUpInside];
     [secondView addSubview:trackButton];
-    
-    //CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-    //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-    //MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
-    //[mapView setRegion:adjustedRegion animated:YES];
-    //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-    //[mapView setRegion:[mapView regionThatFits:viewRegion]];
-    mapView.showsUserLocation = YES;
-    //[mapView setDelegate:self];
     mapView.showsUserLocation=YES;
     
-
     
-//    [mapView showsUserLocation];
     [mapView.userLocation addObserver:self
-                                forKeyPath:@"location"
-                                   options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld)
-                                   context:NULL];
+                           forKeyPath:@"location"
+                              options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld)
+                              context:NULL];
     [secondView addSubview:mapView];
     [scroll addSubview:secondView];
     [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-    //PAN GESTURE IS USELESS CURRENTLY
+    toggleTracking=false;
+    //mapView.mapType = MKMapTypeSatellite;
+    
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
     [scroll addGestureRecognizer:panGesture];
-    toggleTracking=false;
-
-    //[self.view = [MKMapView alloc]init];
-    //MKMapView * mapView = (MKMapView *)self.view;
-    //mapView.mapType = MKMapTypeSatellite;
-    
 }
 
--(void)toggleTracking{
-    if(!toggleTracking)
-    {
-        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
-        [mapView setRegion:adjustedRegion animated:YES];
-    }
-    toggleTracking= !toggleTracking;
-//    if ([mapView showsUserLocation]) {
-//        [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-//    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
-    MapPin * testPin = [[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate placeName:@"asdf" description:@"test"];
-    [mapView addAnnotation:testPin];
-    if(toggleTracking==false)
-        return;
-    if ([mapView showsUserLocation]) {
-        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
-        [mapView setRegion:adjustedRegion animated:YES];
-//        [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-//        [mapView setRegion:[mapView regionThatFits:viewRegion]];
-
-        //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-
-        //r[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-        // [mapView setCenterCoordinate:mapView.userLocation.location.coordinate zoomLevel:14 animated:YES];        // and of course you can use here old and new location values
-   }
-}
-
-- (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
-    NSLog(@"Pan Gesture Called");
-/*
-    UIView *view = [self.view hitTest:[gesture locationInView:gesture.view] withEvent:nil];
-    if(UIGestureRecognizerStateBegan == gesture.state ||
-       UIGestureRecognizerStateChanged == gesture.state) {
-        CGPoint translation = [gesture translationInView:gesture.view];
-        // Move the view's center using the gesture
-        self.view.center = CGPointMake(_centerX + translation.x, view.center.y);
-    } else {// cancel, fail, or ended
-        // Animate back to center x
-        [UIView animateWithDuration:.3 animations:^{
-            view.center = CGPointMake(_centerX, view.center.y);
-        }];
-    }*/
-}
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
 
 - (IBAction)sendLocation{
     //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
@@ -219,6 +126,61 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 
 }
+-(void)setUpLocation{
+    locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    locationManager.distanceFilter = kCLDistanceFilterNone;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [locationManager startUpdatingLocation];
+}
 
+- (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
+    NSLog(@"Pan Gesture Called (DOES NOTHING)");
+    /*
+     UIView *view = [self.view hitTest:[gesture locationInView:gesture.view] withEvent:nil];
+     if(UIGestureRecognizerStateBegan == gesture.state ||
+     UIGestureRecognizerStateChanged == gesture.state) {
+     CGPoint translation = [gesture translationInView:gesture.view];
+     // Move the view's center using the gesture
+     self.view.center = CGPointMake(_centerX + translation.x, view.center.y);
+     } else {// cancel, fail, or ended
+     // Animate back to center x
+     [UIView animateWithDuration:.3 animations:^{
+     view.center = CGPointMake(_centerX, view.center.y);
+     }];
+     }*/
+}
+
+-(void)toggleTracking{
+    if(!toggleTracking)
+    {
+        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
+        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+        [mapView setRegion:adjustedRegion animated:YES];
+    }
+    toggleTracking= !toggleTracking;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    MapPin * testPin =[[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate placeName:@"asdf" description:@"test"];
+    [mapView addAnnotation:testPin];
+    if(toggleTracking==false)
+        return;
+    if ([mapView showsUserLocation]) {
+        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
+        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+        [mapView setRegion:adjustedRegion animated:YES];
+    }
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
 
 @end
