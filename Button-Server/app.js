@@ -12,6 +12,7 @@ var express = require('express'),
   env = process.env.NODE_ENV || 'development',
   config = require('./config')[env],
   User = require('./models/user'),
+  Coord = require('./models/coord'),
   passportSocketIo = require("passport.socketio"),
   fs = require('fs'),
   cstore = new MongoStore(config.db);

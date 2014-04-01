@@ -1,5 +1,4 @@
-var User = require('../models/user'),
-  _ = require('underscore'),
+var _ = require('underscore'),
   passport = require('passport');
 
 // use for routes that require authentication; user is automatically
