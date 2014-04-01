@@ -38,6 +38,10 @@ app.use(express.logger('dev'));
 // compress responses with gzip/deflate
 app.use(express.compress());
 
+// parse bodies
+app.use(express.json());
+app.use(express.urlencoded());
+
 // pretend RESTful http methods are POSTs
 app.use(express.methodOverride());
 
@@ -57,13 +61,6 @@ app.use(express.session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// prevent CSRF attacks
-//app.use(express.csrf());
-// generate token for handlebars on every request
-//app.use(function(req, res, next) {
-//  res.locals.token = req.csrfToken();
-//  return next();
-//});
 
 // access config from templates
 app.use(function(req, res, next) {
