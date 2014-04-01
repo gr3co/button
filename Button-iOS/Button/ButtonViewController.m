@@ -153,7 +153,7 @@
 }
 
 - (IBAction)sendLocation{
-    [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
+    //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
     NSLog(@"sendLocation currently deactivated");
     return;
     if (currentLocation == nil){
