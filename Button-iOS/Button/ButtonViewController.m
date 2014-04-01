@@ -138,10 +138,20 @@
     int status = [[parsedData objectForKey:@"status"] intValue];
     id response = [parsedData objectForKey:@"data"];
     if (status != 200){
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"")
+                                    message:response
+                                   delegate:nil
+                          cancelButtonTitle:NSLocalizedString(@"OK", @"")
+                          otherButtonTitles:nil] show];
         NSLog(@"error: %@", response);
         return;
     }
     if ([response isKindOfClass:[NSString class]]){
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Message from Server", @"")
+                                    message:response
+                                   delegate:nil
+                          cancelButtonTitle:NSLocalizedString(@"OK", @"")
+                          otherButtonTitles:nil] show];
         NSLog(@"response: %@", response);
         return;
     }
@@ -235,6 +245,10 @@
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
+    /*[mapView removeAnnotation:myPoint];
+    myPoint =[[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate
+                                       placeName:@"Me" description:@"My boner"];
+    [mapView addAnnotation:myPoint];*/
     if(toggleTracking==false)
         return;
     if ([mapView showsUserLocation]) {
