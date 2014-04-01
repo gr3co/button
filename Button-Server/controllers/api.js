@@ -23,12 +23,24 @@ module.exports = function(app) {
 		}
 		var lat = parseFloat(req.query.lat);
 		var lon = parseFloat(req.query.lng);
-		var data = {
-			identifier : req.query.idnum,
-			coords : [lon, lat],
-			timestamp : new Date()
-		}
-		var boner = new Coord(data);
+		Coord.findOneAndUpdate(
+			{identifier : req.query.idnum},
+			{coords : [lon, lat],
+			timestamp : new Date()},
+			{upsert : true},
+			function (err){
+				if (err){
+					return res.json({
+						status: 500,
+						message: "There was an error saving coordinates."
+					});
+				}
+				else return res.json({
+					status: 200,
+					message: "Location successfully saved."
+				});
+			});
+		/*var boner = new Coord(data);
 		boner.save(function(err){
 			if (err){
 				return res.json({
@@ -41,6 +53,7 @@ module.exports = function(app) {
 				message: "Location successfully saved."
 			});
 		});
+		*/
 	});
 
 };
