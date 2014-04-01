@@ -103,11 +103,10 @@
         return;
     }
     
-    NSLog(@"%@", [UIDevice currentDevice].identifierForVendor);
-    
     float longitude = currentLocation.coordinate.longitude;
     float latitude = currentLocation.coordinate.latitude;
-    NSString *params = [NSString stringWithFormat:@"long=%f&lat=%f",longitude,latitude];
+    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    NSString *params = [NSString stringWithFormat:@"long=%f&lat=%f&idnum=%@",longitude,latitude, identifier];
     NSString *url = @"http://bonerbutton.com/api/sendLocation";
     NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
