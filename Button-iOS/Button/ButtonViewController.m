@@ -11,6 +11,7 @@
 @interface ViewController ()
 {
     MKMapView * mapView;
+    BOOL toggleTracking;
 }
 
 @end
@@ -51,6 +52,9 @@
     float height = self.view.bounds.size.height;
     float buttonWidth = width / 2;
     
+
+    
+    
     theButton = [UIButton buttonWithType:UIButtonTypeSystem];
     theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2,
                                  buttonWidth, buttonWidth);
@@ -64,6 +68,16 @@
     mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-100)];
     mapView.delegate=self;
     
+    UIButton* trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+
+    //trackButton.center = CGPointMake(100, 100);
+    //trackButton.center = CGPointMake(self.view.frame.size.width-10, self.view.frame.size.height);
+    trackButton.frame = CGRectMake(self.view.frame.size.width-65,self.view.frame.size.height-87.5,
+                                   50, 50);
+    [trackButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
+    [trackButton addTarget:self action:@selector(toggleTracking) forControlEvents:UIControlEventTouchUpInside];
+    [secondView addSubview:trackButton];
+    
     //CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
     //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
     //MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
@@ -73,6 +87,9 @@
     mapView.showsUserLocation = YES;
     //[mapView setDelegate:self];
     mapView.showsUserLocation=YES;
+    
+
+    
 //    [mapView showsUserLocation];
     [mapView.userLocation addObserver:self
                                 forKeyPath:@"location"
@@ -85,6 +102,7 @@
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
     [scroll addGestureRecognizer:panGesture];
+    toggleTracking=false;
 
     //[self.view = [MKMapView alloc]init];
     //MKMapView * mapView = (MKMapView *)self.view;
@@ -92,14 +110,24 @@
     
 }
 
+-(void)toggleTracking{
+    toggleTracking= !toggleTracking;
+//    if ([mapView showsUserLocation]) {
+//        [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
+//    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    return;
+    if(toggleTracking==false)
+        return;
     if ([mapView showsUserLocation]) {
         [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-// [mapView setCenterCoordinate:mapView.userLocation.location.coordinate zoomLevel:14 animated:YES];        // and of course you can use here old and new location values
+
+        //r[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
+        // [mapView setCenterCoordinate:mapView.userLocation.location.coordinate zoomLevel:14 animated:YES];        // and of course you can use here old and new location values
    }
 }
 
