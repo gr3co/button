@@ -235,8 +235,6 @@
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    MapPin * testPin =[[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate placeName:@"asdf" description:@"test"];
-    [mapView addAnnotation:testPin];
     if(toggleTracking==false)
         return;
     if ([mapView showsUserLocation]) {

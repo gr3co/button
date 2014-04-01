@@ -20,6 +20,7 @@
     CLLocation *currentLocation;
     MKMapView * mapView;
     NSMutableArray *coords;
+    MapPin<MKAnnotation> *myPoint;
     BOOL toggleTracking;
 }
 
