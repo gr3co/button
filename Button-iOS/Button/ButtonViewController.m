@@ -21,6 +21,21 @@
     [self setUpUI];
 }
 
+- (MKAnnotationView *) mapView:(MKMapView *)mapView
+             viewForAnnotation:(MapPin <MKAnnotation>*) annotation {
+    MKPinAnnotationView *annView=[[MKPinAnnotationView alloc]
+                                  initWithAnnotation:annotation reuseIdentifier:@"pin"];
+
+//    if(annotation getBonerTime)
+
+    if([[annotation title] isEqualToString:@"Current Location"]) { annView.pinColor = MKPinAnnotationColorRed; }else{annView.pinColor = MKPinAnnotationColorGreen;}
+    
+    //annView.pinColor = MKPinAnnotationColorGreen;
+    return annView;
+}
+
+
+
 -(void) setUpUI
 {
     UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];

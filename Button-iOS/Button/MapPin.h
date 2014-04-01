@@ -13,6 +13,7 @@
     CLLocationCoordinate2D coordinate;
     NSString *title;
     NSString *subtitle;
+    NSTimeInterval *bonerTime;
 }
 
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
@@ -20,5 +21,6 @@
 @property (nonatomic, readonly, copy) NSString *subtitle;
 
 - (id)initWithCoordinates:(CLLocationCoordinate2D)location placeName:(NSString *)placeName description:(NSString *)description;
+- (NSTimeInterval)getBonerTime;
 
 @end

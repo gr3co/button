@@ -20,8 +20,13 @@
         coordinate = location;
         title = placeName;
         subtitle = description;
+        bonerTime = 0;
     }
     return self;
+}
+
+- (NSTimeInterval)getBonerTime{
+    return *(self->bonerTime);
 }
 
 @end
