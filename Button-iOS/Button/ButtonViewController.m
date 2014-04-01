@@ -171,12 +171,18 @@
 }
 
 -(void)handleCoords:(NSArray*)data{
-    [coords removeAllObjects];
+    for (MapPin<MKAnnotation> *m in coords){
+        [mapView removeAnnotation:m];
+        [coords removeObject:m];
+    }
     for (NSDictionary *d in data){
         float lng = [[d objectForKey:@"lng"] floatValue];
         float lat = [[d objectForKey:@"lat"] floatValue];
-        CLLocation *coord = [[CLLocation alloc] initWithLatitude:lat longitude:lng];
-        [coords addObject:coord];
+        MapPin *pin = [[MapPin alloc]
+                       initWithCoordinates:CLLocationCoordinate2DMake(lat,lng)
+                       placeName:@"Boner" description:@"There's a boner here"];
+        [coords addObject:pin];
+        [mapView addAnnotation:pin];
     }
 }
 

@@ -141,11 +141,11 @@
 				A854B51818EA022300EAC26C /* AppDelegate.m */,
 				A854B52018EA022300EAC26C /* ButtonViewController.h */,
 				A854B52118EA022300EAC26C /* ButtonViewController.m */,
+				A854B54C18EA05F700EAC26C /* Images */,
+				A854B52318EA022300EAC26C /* Images.xcassets */,
 				A9F1357118EA785700001E6F /* MapPin.h */,
 				A9F1357218EA785700001E6F /* MapPin.m */,
-				A854B54C18EA05F700EAC26C /* Images */,
 				A854B50F18EA022300EAC26C /* Supporting Files */,
-				A854B52318EA022300EAC26C /* Images.xcassets */,
 			);
 			path = Button;
 			sourceTree = "<group>";
