@@ -54,11 +54,11 @@
     UIImage *buttonBackground = [UIImage imageNamed:@"bubble_icon.png"];
     
     float width = self.view.bounds.size.width;
-    float height = self.view.bounds.size.height;
+    float height = scroll.bounds.size.height;
     float buttonWidth = width / 2;
     
     theButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2,
+    theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2 - 20,
                                  buttonWidth, buttonWidth);
     [theButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
     [theButton setBackgroundImage:buttonBackground forState:UIControlStateSelected];
@@ -92,6 +92,13 @@
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
     [scroll addGestureRecognizer:panGesture];
+    
+    //iad stuff
+    bannerView = [[ADBannerView alloc]initWithFrame:
+                  CGRectMake(0, height-70, 320, 50)];
+    [bannerView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview: bannerView];
+    
 }
 
 
@@ -116,7 +123,8 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:[NSString stringWithFormat:@"%ld", [postData length]] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:[NSString stringWithFormat:@"%ld", (unsigned long)[postData length]]
+                        forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:postData];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -133,9 +141,32 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     NSError *error = nil;
-    NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    NSLog(@"%@", jsonArray);
+    NSDictionary *parsedData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    int status = [[parsedData objectForKey:@"status"] intValue];
+    id response = [parsedData objectForKey:@"data"];
+    if (status != 200){
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"")
+                                    message:response
+                                   delegate:nil
+                          cancelButtonTitle:NSLocalizedString(@"OK", @"")
+                          otherButtonTitles:nil] show];
+        NSLog(@"error: %@", response);
+        return;
+    }
+    if ([response isKindOfClass:[NSString class]]){
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Message from Server", @"")
+                                    message:response
+                                   delegate:nil
+                          cancelButtonTitle:NSLocalizedString(@"OK", @"")
+                          otherButtonTitles:nil] show];
+        NSLog(@"response: %@", response);
+        return;
+    }
+    if ([response isKindOfClass:[NSArray class]]){
+        [self handleCoords: response];
+    }
 }
+
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"")
@@ -155,6 +186,23 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
 }
+
+-(void)handleCoords:(NSArray*)data{
+    for (MapPin<MKAnnotation> *m in coords){
+        [mapView removeAnnotation:m];
+        [coords removeObject:m];
+    }
+    for (NSDictionary *d in data){
+        float lng = [[d objectForKey:@"lng"] floatValue];
+        float lat = [[d objectForKey:@"lat"] floatValue];
+        MapPin *pin = [[MapPin alloc]
+                       initWithCoordinates:CLLocationCoordinate2DMake(lat,lng)
+                       placeName:@"Boner" description:@"There's a boner here"];
+        [coords addObject:pin];
+        [mapView addAnnotation:pin];
+    }
+}
+
 
 - (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
     NSLog(@"Pan Gesture Called (DOES NOTHING)");
@@ -182,14 +230,32 @@
         [mapView setRegion:adjustedRegion animated:YES];
     }
     toggleTracking= !toggleTracking;
+    
+    
+    //request list of boners
+    float longitude = currentLocation.coordinate.longitude;
+    float latitude = currentLocation.coordinate.latitude;
+    float radius = 10;
+    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
+                        longitude,latitude, radius, identifier];
+    NSString *url = @"http://bonerbutton.com/api/getboners";
+    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPMethod:@"GET"];
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    [connection start];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    MapPin * testPin =[[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate placeName:@"asdf" description:@"test"];
-    [mapView addAnnotation:testPin];
+    /*[mapView removeAnnotation:myPoint];
+    myPoint =[[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate
+                                       placeName:@"Me" description:@"My boner"];
+    [mapView addAnnotation:myPoint];*/
     if(toggleTracking==false)
         return;
     if ([mapView showsUserLocation]) {
@@ -203,6 +269,21 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+-(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
+    NSLog(@"Error loading");
+}
+
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner{
+    NSLog(@"Ad loaded");
+}
+-(void)bannerViewWillLoadAd:(ADBannerView *)banner{
+    NSLog(@"Ad will load");
+}
+-(void)bannerViewActionDidFinish:(ADBannerView *)banner{
+    NSLog(@"Ad did finish");
+    
 }
 
 @end
