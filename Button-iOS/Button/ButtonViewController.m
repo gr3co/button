@@ -54,11 +54,11 @@
     UIImage *buttonBackground = [UIImage imageNamed:@"bubble_icon.png"];
     
     float width = self.view.bounds.size.width;
-    float height = self.view.bounds.size.height;
+    float height = scroll.bounds.size.height;
     float buttonWidth = width / 2;
     
     theButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2,
+    theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2 - 20,
                                  buttonWidth, buttonWidth);
     [theButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
     [theButton setBackgroundImage:buttonBackground forState:UIControlStateSelected];
@@ -92,6 +92,13 @@
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
     [scroll addGestureRecognizer:panGesture];
+    
+    //iad stuff
+    bannerView = [[ADBannerView alloc]initWithFrame:
+                  CGRectMake(0, height-70, 320, 50)];
+    [bannerView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview: bannerView];
+    
 }
 
 
@@ -262,6 +269,21 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+-(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
+    NSLog(@"Error loading");
+}
+
+-(void)bannerViewDidLoadAd:(ADBannerView *)banner{
+    NSLog(@"Ad loaded");
+}
+-(void)bannerViewWillLoadAd:(ADBannerView *)banner{
+    NSLog(@"Ad will load");
+}
+-(void)bannerViewActionDidFinish:(ADBannerView *)banner{
+    NSLog(@"Ad did finish");
+    
 }
 
 @end

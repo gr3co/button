@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Social/Social.h>
 #import <CoreLocation/CoreLocation.h>
+#import <iAd/iAd.h>
 #import <MapKit/MapKit.h>
 #import "MapPin.h"
 
@@ -18,6 +19,7 @@
     UIButton *twitterButton;
     CLLocationManager *locationManager;
     CLLocation *currentLocation;
+    ADBannerView *bannerView;
     MKMapView * mapView;
     NSMutableArray *coords;
     MapPin<MKAnnotation> *myPoint;
