@@ -14,8 +14,8 @@ var express = require('express'),
   User = require('./models/user'),
   Coord = require('./models/coord'),
   passportSocketIo = require("passport.socketio"),
-  fs = require('fs'),
-  cstore = new MongoStore(config.db);
+  fs = require('fs');
+  //cstore = new MongoStore(config.db);
 
 // create and configure express app
 var app = express();
@@ -53,8 +53,8 @@ app.use(express.cookieParser());
 // use MongoDB to hold session data
 app.use(express.session({
   secret: config.cookie.secret,
-  maxAge: config.cookie.maxAge,
-  store: cstore
+  maxAge: config.cookie.maxAge
+  //store: cstore
 }));
 
 // authentication
@@ -173,13 +173,13 @@ db.once('open', function() {
   io.enable('browser client gzip');
 
   //force authorization before handshaking
-  io.set('authorization', passportSocketIo.authorize({
+  /*io.set('authorization', passportSocketIo.authorize({
     cookieParser: express.cookieParser,
     secret: config.cookie.secret,
     store: cstore,
     success: acceptConnection,
     fail: rejectConnection
-  }));
+  }));*/
 
   server.listen(app.get('port'));
   console.log("Web server listening on port " + app.get('port'));
