@@ -15,8 +15,7 @@
     [super viewDidLoad];
     [self setUpLocation];
     [self setUpUI];
-    [self requestBoners];
-    [NSTimer scheduledTimerWithTimeInterval:15.0 target:self
+    [NSTimer scheduledTimerWithTimeInterval:30.0 target:self
                                    selector:@selector(requestBoners)
                                    userInfo:nil repeats:YES];
     
@@ -193,6 +192,16 @@
         //annView.pinColor = MKPinAnnotationColorGreen;
     }
     return annView;
+}
+
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)map{
+    [self requestBoners];
+    if (map.userLocation){
+        CLLocationCoordinate2D noLocation = map.userLocation.location.coordinate;
+        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion adjustedRegion = [map regionThatFits:viewRegion2];
+        [map setRegion:adjustedRegion animated:YES];
+    }
 }
 
 
