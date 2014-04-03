@@ -19,6 +19,11 @@
     [super viewDidLoad];
     [self setUpLocation];
     [self setUpUI];
+    [self requestBoners];
+    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self
+                                   selector:@selector(requestBoners)
+                                   userInfo:nil repeats:YES];
+    
 }
 
 //if i understand this shit correctly, wich i probably dont...
@@ -27,16 +32,18 @@
 //we can color them according to annotation.bonerTime or [annotation getBonerTime]
 //we canalso draw pins from image files insteads of using colors
 //ther are only three colors; green red blue
-- (MKAnnotationView *) mapView:(MKMapView *)mapView
+- (MKAnnotationView *) mapView:(MKMapView *)map
              viewForAnnotation:(MapPin <MKAnnotation>*) annotation {
+    
     MKPinAnnotationView *annView=[[MKPinAnnotationView alloc]
                                   initWithAnnotation:annotation reuseIdentifier:@"pin"];
 
-//    if(annotation getBonerTime)
-
-    if([[annotation title] isEqualToString:@"Current Location"]) { annView.pinColor = MKPinAnnotationColorRed; }else{annView.pinColor = MKPinAnnotationColorGreen;}
-    
-    //annView.pinColor = MKPinAnnotationColorGreen;
+    if([annotation isEqual:[map userLocation]]) {
+        annView.pinColor = MKPinAnnotationColorRed;
+    }
+    else{
+        annView.pinColor = MKPinAnnotationColorGreen;
+    }
     return annView;
 }
 
@@ -92,9 +99,8 @@
     [trackButton setBackgroundImage:[UIImage imageNamed:@"targetActive.png"] forState:UIControlStateSelected];
     [trackButton addTarget:self action:@selector(toggleTracking) forControlEvents:UIControlEventTouchUpInside];
     [secondView addSubview:trackButton];
+    
     mapView.showsUserLocation=YES;
-    
-    
     [mapView.userLocation addObserver:self
                            forKeyPath:@"location"
                               options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld)
@@ -103,7 +109,7 @@
     [scroll addSubview:secondView];
     [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
     toggleTracking=false;
-    //mapView.mapType = MKMapTypeSatellite;
+    
     
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
@@ -116,8 +122,6 @@
 
 
 - (IBAction)sendLocation{
-    //[mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
-
     if (currentLocation == nil){
         NSLog(@"location not set");
         return;
@@ -201,17 +205,18 @@
 }
 
 -(void)handleCoords:(NSArray*)data{
-    for (MapPin<MKAnnotation> *m in coords){
-        [mapView removeAnnotation:m];
-        [coords removeObject:m];
+    NSMutableArray *toRemove = [NSMutableArray array];
+    for (MapPin<MKAnnotation> *m in mapView.annotations){
+        if (![m isEqual:[mapView userLocation]])
+            [toRemove addObject:m];
     }
+    [mapView removeAnnotations:toRemove];
     for (NSDictionary *d in data){
         float lng = [[d objectForKey:@"lng"] floatValue];
         float lat = [[d objectForKey:@"lat"] floatValue];
         MapPin *pin = [[MapPin alloc]
                        initWithCoordinates:CLLocationCoordinate2DMake(lat,lng)
                        placeName:@"Boner" description:@"There's a boner here"];
-        [coords addObject:pin];
         [mapView addAnnotation:pin];
     }
 }
@@ -248,22 +253,6 @@
         [trackButton setSelected:NO];
     }
     toggleTracking= !toggleTracking;
-    
-    
-    //request list of boners
-    float longitude = currentLocation.coordinate.longitude;
-    float latitude = currentLocation.coordinate.latitude;
-    float radius = 10;
-    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
-                        longitude,latitude, radius, identifier];
-    NSString *url = @"http://bonerbutton.com/api/getboners";
-    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request setHTTPMethod:@"GET"];
-    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    [connection start];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -307,6 +296,22 @@
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
+}
+
+-(IBAction)requestBoners{
+    float longitude = currentLocation.coordinate.longitude;
+    float latitude = currentLocation.coordinate.latitude;
+    float radius = 10;
+    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
+                        longitude,latitude, radius, identifier];
+    NSString *url = @"http://bonerbutton.com/api/getboners";
+    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPMethod:@"GET"];
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    [connection start];
 }
 
 @end

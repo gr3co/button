@@ -21,8 +21,6 @@
     CLLocation *currentLocation;
     ADBannerView *bannerView;
     MKMapView * mapView;
-    NSMutableArray *coords;
-    MapPin<MKAnnotation> *myPoint;
     BOOL toggleTracking;
     UIButton* trackButton;
 }
