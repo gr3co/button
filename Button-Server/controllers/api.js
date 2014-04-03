@@ -35,7 +35,9 @@ module.exports = function(app) {
 		var lat = parseFloat(req.query.lat);
 		var lng = parseFloat(req.query.lng);
 		var rad = parseFloat(req.query.rad);
-		Coord.lookupByRadius(lat,lng,rad, function(err, coords){
+		var now = new Date();
+		var earliest = now - 1000 * 60 * 60 * 24;
+		Coord.lookupByRadiusAndAge(lat,lng,rad, earliest, function(err, coords){
 			if (err){
 				return res.json({
 					status: 500,
