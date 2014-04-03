@@ -94,8 +94,11 @@
     [scroll addGestureRecognizer:panGesture];
     
     //iad stuff
+    //apple is fucking weird and we have to make the ads bigger
+    //i bet they're gonna bitch at us because we didn't do that for bubble
+    int adHeight = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]) ? 66 : 50;
     bannerView = [[ADBannerView alloc]initWithFrame:
-                  CGRectMake(0, height-70, 320, 50)];
+                  CGRectMake(0, height-adHeight-20, 320, adHeight)];
     [bannerView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview: bannerView];
     
