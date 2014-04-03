@@ -43,7 +43,11 @@
         annView.pinColor = MKPinAnnotationColorRed;
     }
     else{
-        annView.pinColor = MKPinAnnotationColorGreen;
+        UIImage*original =[UIImage imageNamed:@"boner.png"];
+        annView.image =  [UIImage imageWithCGImage:[original CGImage]
+                                             scale:(original.scale * 7.0)
+                                       orientation:(original.imageOrientation)];
+        //annView.pinColor = MKPinAnnotationColorGreen;
     }
     return annView;
 }
