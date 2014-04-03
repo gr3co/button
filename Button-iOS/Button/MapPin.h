@@ -14,9 +14,9 @@
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, readonly, copy) NSString *title;
 @property (nonatomic, readonly, copy) NSString *subtitle;
-@property long bonerTime;
+@property long long bonerTime;
 
-- (id)initWithCoordinates:(CLLocationCoordinate2D)location andAge:(long)age;
-- (long)getBonerTime;
+- (id)initWithCoordinates:(CLLocationCoordinate2D)location andAge:(long long)age;
+- (long long)getBonerTime;
 
 @end

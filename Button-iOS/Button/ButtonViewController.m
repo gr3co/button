@@ -58,7 +58,7 @@
     [secondView addSubview: bannerView];
     
     UIView *mapBorder = [[UIView alloc] initWithFrame:CGRectMake(0, bannerView.frame.size.height, width, width)];
-    mapBorder.backgroundColor = [UIColor redColor];
+    mapBorder.backgroundColor = [UIColor colorWithRed:106.0/255.0 green:0 blue:0 alpha:1];
     [secondView addSubview:mapBorder];
     
     mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0.01*width, 0.01*width, 0.98 * width, 0.98*width)];
@@ -150,7 +150,7 @@
     for (NSDictionary *d in data){
         float lng = [[d objectForKey:@"lng"] floatValue];
         float lat = [[d objectForKey:@"lat"] floatValue];
-        long age = [[d objectForKey:@"age"] longValue];
+        long long age = [[d objectForKey:@"age"] longLongValue];
         MapPin *pin = [[MapPin alloc]
                        initWithCoordinates:CLLocationCoordinate2DMake(lat,lng)
                        andAge:age];
@@ -189,8 +189,9 @@
         annView.image =  [UIImage imageWithCGImage:[original CGImage]
                                              scale:(original.scale * 6.0)
                                        orientation:(original.imageOrientation)];
-        annView.alpha = .5;
-        //annView.pinColor = MKPinAnnotationColorGreen;
+        NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+        NSTimeInterval difference = currentTime - ((NSTimeInterval)annotation.bonerTime / 1000);
+        annView.alpha = MAX(0.0, 1 - (difference / 86400));
     }
     return annView;
 }

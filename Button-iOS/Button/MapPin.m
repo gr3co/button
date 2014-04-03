@@ -15,7 +15,7 @@
 @synthesize subtitle;
 @synthesize bonerTime;
 
-- (id)initWithCoordinates:(CLLocationCoordinate2D)location andAge:(long)age{
+- (id)initWithCoordinates:(CLLocationCoordinate2D)location andAge:(long long)age{
     self = [super init];
     if (self != nil) {
         coordinate = location;
@@ -26,7 +26,7 @@
     return self;
 }
 
-- (long)getBonerTime{
+- (long long)getBonerTime{
     return bonerTime;
 }
 
