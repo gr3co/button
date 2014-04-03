@@ -47,7 +47,7 @@
     UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     scroll.pagingEnabled = YES;
     scroll.scrollsToTop=YES;
-    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-20);
+    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.view.frame.size.height-20);
     self.view = scroll;
     
 	self.view.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:1.0 alpha:1.0];
@@ -70,10 +70,11 @@
     mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-100)];
     mapView.delegate=self;
     
-    UIButton* trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     trackButton.frame = CGRectMake(self.view.frame.size.width-65,self.view.frame.size.height-87.5,
                                    50, 50);
-    [trackButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
+    [trackButton setBackgroundImage:[UIImage imageNamed:@"targetUnactive.png"] forState:UIControlStateNormal];
+    [trackButton setBackgroundImage:[UIImage imageNamed:@"targetActive.png"] forState:UIControlStateSelected];
     [trackButton addTarget:self action:@selector(toggleTracking) forControlEvents:UIControlEventTouchUpInside];
     [secondView addSubview:trackButton];
     mapView.showsUserLocation=YES;
@@ -225,12 +226,17 @@
 }
 
 -(void)toggleTracking{
+    
     if(!toggleTracking)
     {
+        [trackButton setSelected:YES];
         CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
         MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
         MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
         [mapView setRegion:adjustedRegion animated:YES];
+    }
+    else{
+        [trackButton setSelected:NO];
     }
     toggleTracking= !toggleTracking;
     
@@ -263,8 +269,9 @@
         return;
     if ([mapView showsUserLocation]) {
         CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+        //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
         [mapView setRegion:adjustedRegion animated:YES];
     }
 }
