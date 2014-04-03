@@ -65,9 +65,9 @@
     mapView.delegate=self;
     
     trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    trackButton.frame = CGRectMake(self.view.frame.size.width-65,self.view.frame.size.height-87.5,
-                                   50, 50);
-    [trackButton setBackgroundImage:[UIImage imageNamed:@"targetUnactive.png"] forState:UIControlStateNormal];
+    trackButton.frame = CGRectMake(self.view.frame.size.width-80,self.view.frame.size.height-100,
+                                   75, 75);
+    [trackButton setBackgroundImage:[UIImage imageNamed:@"targetInactive.png"] forState:UIControlStateNormal];
     [trackButton setBackgroundImage:[UIImage imageNamed:@"targetActive.png"] forState:UIControlStateSelected];
     [trackButton addTarget:self action:@selector(toggleTracking) forControlEvents:UIControlEventTouchUpInside];
     [secondView addSubview:trackButton];

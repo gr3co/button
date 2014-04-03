@@ -28,9 +28,9 @@
 		A87F100E18ED2B9A00329459 /* boner_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A87F100D18ED2B9A00329459 /* boner_button.png */; };
 		A87F101018EE009600329459 /* background_image.png in Resources */ = {isa = PBXBuildFile; fileRef = A87F100F18EE009600329459 /* background_image.png */; };
 		A9AA3BF318ED312C007F7630 /* boner.png in Resources */ = {isa = PBXBuildFile; fileRef = A9AA3BF218ED312C007F7630 /* boner.png */; };
+		A9AA3BF518EE0146007F7630 /* targetInactive.png in Resources */ = {isa = PBXBuildFile; fileRef = A9AA3BF418EE0146007F7630 /* targetInactive.png */; };
 		A9F1357318EA785700001E6F /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F1357218EA785700001E6F /* MapPin.m */; };
 		A9F1357618EB3E7500001E6F /* targetActive.png in Resources */ = {isa = PBXBuildFile; fileRef = A9F1357418EB3E7500001E6F /* targetActive.png */; };
-		A9F1357718EB3E7500001E6F /* targetUnactive.png in Resources */ = {isa = PBXBuildFile; fileRef = A9F1357518EB3E7500001E6F /* targetUnactive.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,10 +71,10 @@
 		A87F100D18ED2B9A00329459 /* boner_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = boner_button.png; sourceTree = "<group>"; };
 		A87F100F18EE009600329459 /* background_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_image.png; sourceTree = "<group>"; };
 		A9AA3BF218ED312C007F7630 /* boner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = boner.png; sourceTree = "<group>"; };
+		A9AA3BF418EE0146007F7630 /* targetInactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = targetInactive.png; sourceTree = "<group>"; };
 		A9F1357118EA785700001E6F /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
 		A9F1357218EA785700001E6F /* MapPin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPin.m; sourceTree = "<group>"; };
 		A9F1357418EB3E7500001E6F /* targetActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = targetActive.png; sourceTree = "<group>"; };
-		A9F1357518EB3E7500001E6F /* targetUnactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = targetUnactive.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,7 +194,7 @@
 				A9AA3BF218ED312C007F7630 /* boner.png */,
 				A87F100D18ED2B9A00329459 /* boner_button.png */,
 				A9F1357418EB3E7500001E6F /* targetActive.png */,
-				A9F1357518EB3E7500001E6F /* targetUnactive.png */,
+				A9AA3BF418EE0146007F7630 /* targetInactive.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -283,11 +283,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9AA3BF518EE0146007F7630 /* targetInactive.png in Resources */,
 				A9AA3BF318ED312C007F7630 /* boner.png in Resources */,
 				A87F100E18ED2B9A00329459 /* boner_button.png in Resources */,
 				A87F101018EE009600329459 /* background_image.png in Resources */,
 				A9F1357618EB3E7500001E6F /* targetActive.png in Resources */,
-				A9F1357718EB3E7500001E6F /* targetUnactive.png in Resources */,
+				A87F100C18ED175F00329459 /* background_image.jpg in Resources */,
 				A854B52418EA022300EAC26C /* Images.xcassets in Resources */,
 				A854B51318EA022300EAC26C /* InfoPlist.strings in Resources */,
 			);
