@@ -30,7 +30,7 @@
     scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-20);
     self.view = scroll;
     
-    UIImage *backgroundImage = [UIImage imageNamed:@"background_image.jpg"];
+    UIImage *backgroundImage = [UIImage imageNamed:@"background_image.png"];
     UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
     background.frame = CGRectMake(0,0,scroll.contentSize.width, scroll.contentSize.height);
     [self.view addSubview:background];
