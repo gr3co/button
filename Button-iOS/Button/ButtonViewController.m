@@ -16,7 +16,7 @@
     [self setUpLocation];
     [self setUpUI];
     [self requestBoners];
-    [NSTimer scheduledTimerWithTimeInterval:60.0 target:self
+    [NSTimer scheduledTimerWithTimeInterval:15.0 target:self
                                    selector:@selector(requestBoners)
                                    userInfo:nil repeats:YES];
     
@@ -186,7 +186,11 @@
         annView.pinColor = MKPinAnnotationColorRed;
     }
     else{
-        annView.pinColor = MKPinAnnotationColorGreen;
+        UIImage*original =[UIImage imageNamed:@"boner.png"];
+        annView.image =  [UIImage imageWithCGImage:[original CGImage]
+                                             scale:(original.scale * 10.0)
+                                       orientation:(original.imageOrientation)];
+        //annView.pinColor = MKPinAnnotationColorGreen;
     }
     return annView;
 }
