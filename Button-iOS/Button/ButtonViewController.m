@@ -45,7 +45,7 @@
     else{
         UIImage*original =[UIImage imageNamed:@"boner.png"];
         annView.image =  [UIImage imageWithCGImage:[original CGImage]
-                                             scale:(original.scale * 7.0)
+                                             scale:(original.scale * 5.0)
                                        orientation:(original.imageOrientation)];
         //annView.pinColor = MKPinAnnotationColorGreen;
     }
