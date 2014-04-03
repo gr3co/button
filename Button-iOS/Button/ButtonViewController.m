@@ -64,7 +64,7 @@
     [self.view addSubview:background];
     
 	self.view.backgroundColor = [UIColor blackColor];
-    UIImage *buttonBackground = [UIImage imageNamed:@"bubble_icon.png"];
+    UIImage *buttonBackground = [UIImage imageNamed:@"boner_button.png"];
     
     float width = self.view.bounds.size.width;
     float height = scroll.bounds.size.height;
