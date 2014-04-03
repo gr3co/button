@@ -49,7 +49,8 @@ module.exports = function(app) {
 					data: _.map(coords, function(val){
 						return {
 							lng : val.coords[0],
-							lat : val.coords[1]
+							lat : val.coords[1],
+							age : val.timestamp.valueOf()
 						}})
 			});
 		});
