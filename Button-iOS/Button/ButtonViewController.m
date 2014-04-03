@@ -68,7 +68,7 @@
     
     float width = self.view.bounds.size.width;
     float height = scroll.bounds.size.height;
-    float buttonWidth = width / 2;
+    float buttonWidth = 0.75 * width;
     
     theButton = [UIButton buttonWithType:UIButtonTypeSystem];
     theButton.frame = CGRectMake(width/2 - buttonWidth/2, height/2 - buttonWidth/2 - 20,
@@ -214,9 +214,10 @@
     for (NSDictionary *d in data){
         float lng = [[d objectForKey:@"lng"] floatValue];
         float lat = [[d objectForKey:@"lat"] floatValue];
+        long age = [[d objectForKey:@"age"] longValue];
         MapPin *pin = [[MapPin alloc]
                        initWithCoordinates:CLLocationCoordinate2DMake(lat,lng)
-                       placeName:@"Boner" description:@"There's a boner here"];
+                       andAge:age];
         [mapView addAnnotation:pin];
     }
 }

@@ -15,19 +15,19 @@
 @synthesize subtitle;
 @synthesize bonerTime;
 
-- (id)initWithCoordinates:(CLLocationCoordinate2D)location placeName:placeName description:description {
+- (id)initWithCoordinates:(CLLocationCoordinate2D)location andAge:(long)age{
     self = [super init];
     if (self != nil) {
         coordinate = location;
-        title = placeName;
-        subtitle = description;
-        bonerTime = 0;
+        title = @"Boner";
+        subtitle = @"There is a boner here!";
+        bonerTime = age;
     }
     return self;
 }
 
-- (NSTimeInterval)getBonerTime{
-    return *(self->bonerTime);
+- (long)getBonerTime{
+    return bonerTime;
 }
 
 @end
