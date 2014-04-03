@@ -47,7 +47,7 @@
     UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     scroll.pagingEnabled = YES;
     scroll.scrollsToTop=YES;
-    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-20);
+    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.view.frame.size.height-20);
     self.view = scroll;
     
 	self.view.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:1.0 alpha:1.0];
@@ -266,8 +266,9 @@
         return;
     if ([mapView showsUserLocation]) {
         CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+        //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
         [mapView setRegion:adjustedRegion animated:YES];
     }
 }
