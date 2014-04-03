@@ -24,6 +24,7 @@
     NSMutableArray *coords;
     MapPin<MKAnnotation> *myPoint;
     BOOL toggleTracking;
+    UIButton* trackButton;
 }
 
 @end

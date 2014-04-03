@@ -70,10 +70,11 @@
     mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-100)];
     mapView.delegate=self;
     
-    UIButton* trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     trackButton.frame = CGRectMake(self.view.frame.size.width-65,self.view.frame.size.height-87.5,
                                    50, 50);
-    [trackButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
+    [trackButton setBackgroundImage:[UIImage imageNamed:@"targetUnactive.png"] forState:UIControlStateNormal];
+    [trackButton setBackgroundImage:[UIImage imageNamed:@"targetActive.png"] forState:UIControlStateSelected];
     [trackButton addTarget:self action:@selector(toggleTracking) forControlEvents:UIControlEventTouchUpInside];
     [secondView addSubview:trackButton];
     mapView.showsUserLocation=YES;
@@ -222,12 +223,17 @@
 }
 
 -(void)toggleTracking{
+    
     if(!toggleTracking)
     {
+        [trackButton setSelected:YES];
         CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
         MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
         MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
         [mapView setRegion:adjustedRegion animated:YES];
+    }
+    else{
+        [trackButton setSelected:NO];
     }
     toggleTracking= !toggleTracking;
     
