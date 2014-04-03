@@ -244,8 +244,9 @@
     {
         [trackButton setSelected:YES];
         CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion];
+        //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
         [mapView setRegion:adjustedRegion animated:YES];
     }
     else{
