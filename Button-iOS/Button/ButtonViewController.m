@@ -44,13 +44,19 @@
 
 -(void) setUpUI
 {
+    
     UIScrollView *scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     scroll.pagingEnabled = YES;
     scroll.scrollsToTop=YES;
-    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.view.frame.size.height-20);
+    scroll.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-20);
     self.view = scroll;
     
-	self.view.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:1.0 alpha:1.0];
+    UIImage *backgroundImage = [UIImage imageNamed:@"background_image.jpg"];
+    UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+    background.frame = CGRectMake(0,0,scroll.contentSize.width, scroll.contentSize.height);
+    [self.view addSubview:background];
+    
+	self.view.backgroundColor = [UIColor blackColor];
     UIImage *buttonBackground = [UIImage imageNamed:@"bubble_icon.png"];
     
     float width = self.view.bounds.size.width;
@@ -67,7 +73,16 @@
     [scroll addSubview:theButton];
     
     UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-100)];
+    
+    bannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    [bannerView setBackgroundColor:[UIColor clearColor]];
+    [secondView addSubview: bannerView];
+    
+    UIView *mapBorder = [[UIView alloc] initWithFrame:CGRectMake(0, bannerView.frame.size.height, width, width)];
+    mapBorder.backgroundColor = [UIColor redColor];
+    [secondView addSubview:mapBorder];
+    
+    mapView = [(MKMapView*) [MKMapView alloc]initWithFrame:CGRectMake(0.01*width, 0.01*width, 0.98 * width, 0.98*width)];
     mapView.delegate=self;
     
     trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -84,7 +99,7 @@
                            forKeyPath:@"location"
                               options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld)
                               context:NULL];
-    [secondView addSubview:mapView];
+    [mapBorder addSubview:mapView];
     [scroll addSubview:secondView];
     [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
     toggleTracking=false;
@@ -93,15 +108,9 @@
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
     [scroll addGestureRecognizer:panGesture];
+
     
-    //iad stuff
-    //apple is fucking weird and we have to make the ads bigger
-    //i bet they're gonna bitch at us because we didn't do that for bubble
-    int adHeight = ([[UIDevice currentDevice].model isEqualToString:@"iPad"]) ? 66 : 50;
-    bannerView = [[ADBannerView alloc]initWithFrame:
-                  CGRectMake(0, height-adHeight-20, 320, adHeight)];
-    [bannerView setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview: bannerView];
+    [self setNeedsStatusBarAppearanceUpdate];
     
 }
 
@@ -294,6 +303,10 @@
 -(void)bannerViewActionDidFinish:(ADBannerView *)banner{
     NSLog(@"Ad did finish");
     
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 @end
