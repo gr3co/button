@@ -8,10 +8,6 @@
 
 #import "ButtonViewController.h"
 
-@interface ViewController ()
-
-@end
-
 @implementation ViewController
 
 - (void)viewDidLoad
@@ -20,34 +16,11 @@
     [self setUpLocation];
     [self setUpUI];
     [self requestBoners];
-    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self
+    [NSTimer scheduledTimerWithTimeInterval:60.0 target:self
                                    selector:@selector(requestBoners)
                                    userInfo:nil repeats:YES];
     
 }
-
-//if i understand this shit correctly, wich i probably dont...
-//this method is called every time an annotation object is added
-//by checking properties of the (MapPin) annotation that it takes
-//we can color them according to annotation.bonerTime or [annotation getBonerTime]
-//we canalso draw pins from image files insteads of using colors
-//ther are only three colors; green red blue
-- (MKAnnotationView *) mapView:(MKMapView *)map
-             viewForAnnotation:(MapPin <MKAnnotation>*) annotation {
-    
-    MKPinAnnotationView *annView=[[MKPinAnnotationView alloc]
-                                  initWithAnnotation:annotation reuseIdentifier:@"pin"];
-    if ([annotation isKindOfClass:[MKUserLocation class]])
-        return nil;
-    if([annotation isEqual:[map userLocation]]) {
-        annView.pinColor = MKPinAnnotationColorRed;
-    }
-    else{
-        annView.pinColor = MKPinAnnotationColorGreen;
-    }
-    return annView;
-}
-
 
 -(void) setUpUI
 {
@@ -121,6 +94,113 @@
 }
 
 
+
+
+
+
+
+/*
+ * LOCATION FUNCTIONS
+ */
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    currentLocation = [locations lastObject];
+}
+
+
+-(void)setUpLocation{
+    locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    locationManager.distanceFilter = kCLDistanceFilterNone;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [locationManager startUpdatingLocation];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    
+    if(toggleTracking==false)
+        return;
+    if ([mapView showsUserLocation]) {
+        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
+        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
+        [mapView setRegion:adjustedRegion animated:YES];
+    }
+}
+
+
+
+
+
+
+
+/*
+ * MAP FUNCTIONS
+ */
+
+-(void)handleCoords:(NSArray*)data{
+    NSMutableArray *toRemove = [NSMutableArray array];
+    for (MapPin<MKAnnotation> *m in mapView.annotations){
+        if (![m isEqual:[mapView userLocation]])
+            [toRemove addObject:m];
+    }
+    [mapView removeAnnotations:toRemove];
+    for (NSDictionary *d in data){
+        float lng = [[d objectForKey:@"lng"] floatValue];
+        float lat = [[d objectForKey:@"lat"] floatValue];
+        long age = [[d objectForKey:@"age"] longValue];
+        MapPin *pin = [[MapPin alloc]
+                       initWithCoordinates:CLLocationCoordinate2DMake(lat,lng)
+                       andAge:age];
+        [mapView addAnnotation:pin];
+    }
+}
+
+-(void)toggleTracking{
+    
+    if(!toggleTracking)
+    {
+        [trackButton setSelected:YES];
+        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
+        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
+        [mapView setRegion:adjustedRegion animated:YES];
+    }
+    else{
+        [trackButton setSelected:NO];
+    }
+    toggleTracking= !toggleTracking;
+}
+
+- (MKAnnotationView *) mapView:(MKMapView *)map
+             viewForAnnotation:(MapPin <MKAnnotation>*) annotation {
+    
+    MKPinAnnotationView *annView=[[MKPinAnnotationView alloc]
+                                  initWithAnnotation:annotation reuseIdentifier:@"pin"];
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+        return nil;
+    if([annotation isEqual:[map userLocation]]) {
+        annView.pinColor = MKPinAnnotationColorRed;
+    }
+    else{
+        annView.pinColor = MKPinAnnotationColorGreen;
+    }
+    return annView;
+}
+
+
+
+
+
+
+
+/*
+ * NETWORK FUNCTIONS
+ */
+
 - (IBAction)sendLocation{
     if (currentLocation == nil){
         NSLog(@"location not set");
@@ -141,19 +221,27 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:[NSString stringWithFormat:@"%ld", (unsigned long)[postData length]]
-                        forHTTPHeaderField:@"Content-Length"];
+   forHTTPHeaderField:@"Content-Length"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:postData];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     [connection start];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    currentLocation = [locations lastObject];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    NSLog(@"connection established");
+-(IBAction)requestBoners{
+    float longitude = currentLocation.coordinate.longitude;
+    float latitude = currentLocation.coordinate.latitude;
+    float radius = 10;
+    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
+                        longitude,latitude, radius, identifier];
+    NSString *url = @"http://bonerbutton.com/api/getboners";
+    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPMethod:@"GET"];
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    [connection start];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -184,97 +272,21 @@
     }
 }
 
-
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"")
-                                 message:[error localizedDescription]
-                                delegate:nil
-                       cancelButtonTitle:NSLocalizedString(@"OK", @"")
-                       otherButtonTitles:nil] show];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-
-}
--(void)setUpLocation{
-    locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    locationManager.distanceFilter = kCLDistanceFilterNone;
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [locationManager startUpdatingLocation];
-}
-
--(void)handleCoords:(NSArray*)data{
-    NSMutableArray *toRemove = [NSMutableArray array];
-    for (MapPin<MKAnnotation> *m in mapView.annotations){
-        if (![m isEqual:[mapView userLocation]])
-            [toRemove addObject:m];
-    }
-    [mapView removeAnnotations:toRemove];
-    for (NSDictionary *d in data){
-        float lng = [[d objectForKey:@"lng"] floatValue];
-        float lat = [[d objectForKey:@"lat"] floatValue];
-        long age = [[d objectForKey:@"age"] longValue];
-        MapPin *pin = [[MapPin alloc]
-                       initWithCoordinates:CLLocationCoordinate2DMake(lat,lng)
-                       andAge:age];
-        [mapView addAnnotation:pin];
-    }
+                                message:[error localizedDescription]
+                               delegate:nil
+                      cancelButtonTitle:NSLocalizedString(@"OK", @"")
+                      otherButtonTitles:nil] show];
 }
 
 
-- (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
-    NSLog(@"Pan Gesture Called (DOES NOTHING)");
-    /*
-     UIView *view = [self.view hitTest:[gesture locationInView:gesture.view] withEvent:nil];
-     if(UIGestureRecognizerStateBegan == gesture.state ||
-     UIGestureRecognizerStateChanged == gesture.state) {
-     CGPoint translation = [gesture translationInView:gesture.view];
-     // Move the view's center using the gesture
-     self.view.center = CGPointMake(_centerX + translation.x, view.center.y);
-     } else {// cancel, fail, or ended
-     // Animate back to center x
-     [UIView animateWithDuration:.3 animations:^{
-     view.center = CGPointMake(_centerX, view.center.y);
-     }];
-     }*/
-}
 
--(void)toggleTracking{
-    
-    if(!toggleTracking)
-    {
-        [trackButton setSelected:YES];
-        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-        //MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
-        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
-        [mapView setRegion:adjustedRegion animated:YES];
-    }
-    else{
-        [trackButton setSelected:NO];
-    }
-    toggleTracking= !toggleTracking;
-}
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
-    /*[mapView removeAnnotation:myPoint];
-    myPoint =[[MapPin alloc] initWithCoordinates:mapView.userLocation.location.coordinate
-                                       placeName:@"Me" description:@"My boner"];
-    [mapView addAnnotation:myPoint];*/
-    if(toggleTracking==false)
-        return;
-    if ([mapView showsUserLocation]) {
-        CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
-        //MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
-        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
-        MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
-        [mapView setRegion:adjustedRegion animated:YES];
-    }
-}
+
+/*
+ * MISC FUNCTIONS
+ */
 
 - (void)didReceiveMemoryWarning
 {
@@ -282,38 +294,15 @@
 }
 
 -(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
-    NSLog(@"Error loading");
-}
-
--(void)bannerViewDidLoadAd:(ADBannerView *)banner{
-    NSLog(@"Ad loaded");
-}
--(void)bannerViewWillLoadAd:(ADBannerView *)banner{
-    NSLog(@"Ad will load");
-}
--(void)bannerViewActionDidFinish:(ADBannerView *)banner{
-    NSLog(@"Ad did finish");
-    
+    NSLog(@"%@", [error localizedDescription]);
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
 }
 
--(IBAction)requestBoners{
-    float longitude = currentLocation.coordinate.longitude;
-    float latitude = currentLocation.coordinate.latitude;
-    float radius = 10;
-    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
-                        longitude,latitude, radius, identifier];
-    NSString *url = @"http://bonerbutton.com/api/getboners";
-    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request setHTTPMethod:@"GET"];
-    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    [connection start];
+- (void)gestureHandler:(UIScreenEdgePanGestureRecognizer *)gesture {
+    NSLog(@"Pan Gesture Called (DOES NOTHING)");
 }
 
 @end
