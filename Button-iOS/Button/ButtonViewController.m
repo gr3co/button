@@ -200,7 +200,7 @@
     [self requestBoners];
     if (map.userLocation){
         CLLocationCoordinate2D noLocation = map.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
+        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
         MKCoordinateRegion adjustedRegion = [map regionThatFits:viewRegion2];
         [map setRegion:adjustedRegion animated:YES];
     }
