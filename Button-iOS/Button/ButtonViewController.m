@@ -67,8 +67,13 @@
     trackButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     trackButton.frame = CGRectMake(self.view.frame.size.width-80,self.view.frame.size.height-100,
                                    75, 75);
+    trackingDisabled =[UIImage imageNamed:@"targetInactive.png"];
+    trackingEnabled = [UIImage imageNamed:@"targetActive.png"];
+    
+
     [trackButton setBackgroundImage:[UIImage imageNamed:@"targetInactive.png"] forState:UIControlStateNormal];
-    [trackButton setBackgroundImage:[UIImage imageNamed:@"targetActive.png"] forState:UIControlStateSelected];
+    //[trackButton setBackgroundImage:[UIImage imageNamed:@"targetActive.png"] forState:UIControlStateSelected];
+    //[trackButton setBackgroundImage:[UIImage imageNamed:@"targetActive.png"] forState:UIControlStateHighlighted];
     [trackButton addTarget:self action:@selector(toggleTracking) forControlEvents:UIControlEventTouchUpInside];
     [secondView addSubview:trackButton];
     
@@ -162,14 +167,18 @@
     
     if(!toggleTracking)
     {
-        [trackButton setSelected:YES];
+        [trackButton setBackgroundImage:trackingEnabled forState:UIControlStateNormal];
+        //[trackButton setHighlighted:YES];
+        //[trackButton setSelected:YES];
         CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
         MKCoordinateRegion viewRegion2 = MKCoordinateRegionMakeWithDistance(noLocation, 5000, 5000);
         MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
         [mapView setRegion:adjustedRegion animated:YES];
     }
     else{
-        [trackButton setSelected:NO];
+        [trackButton setBackgroundImage:trackingDisabled forState:UIControlStateNormal];
+        //[trackButton setHighlighted:NO];
+        //[trackButton setSelected:NO];
     }
     toggleTracking= !toggleTracking;
 }

@@ -23,6 +23,8 @@
     MKMapView * mapView;
     BOOL toggleTracking;
     UIButton* trackButton;
+    UIImage* trackingDisabled;
+    UIImage* trackingEnabled;
 }
 
 @end
