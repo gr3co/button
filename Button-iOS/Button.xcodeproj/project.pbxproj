@@ -27,6 +27,10 @@
 		A854B54B18EA04E500EAC26C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A854B54A18EA04E500EAC26C /* CoreData.framework */; };
 		A87F100E18ED2B9A00329459 /* boner_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A87F100D18ED2B9A00329459 /* boner_button.png */; };
 		A87F101018EE009600329459 /* background_image.png in Resources */ = {isa = PBXBuildFile; fileRef = A87F100F18EE009600329459 /* background_image.png */; };
+		A981559518F1C458004D45DF /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A981559418F1C458004D45DF /* Mapbox.framework */; };
+		A981559718F1C4BE004D45DF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A981559618F1C4BE004D45DF /* QuartzCore.framework */; };
+		A981559918F1C4C9004D45DF /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A981559818F1C4C9004D45DF /* libsqlite3.dylib */; };
+		A981559B18F1C4D1004D45DF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A981559A18F1C4D1004D45DF /* libz.dylib */; };
 		A9AA3BF318ED312C007F7630 /* boner.png in Resources */ = {isa = PBXBuildFile; fileRef = A9AA3BF218ED312C007F7630 /* boner.png */; };
 		A9AA3BF518EE0146007F7630 /* targetInactive.png in Resources */ = {isa = PBXBuildFile; fileRef = A9AA3BF418EE0146007F7630 /* targetInactive.png */; };
 		A9F1357318EA785700001E6F /* MapPin.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F1357218EA785700001E6F /* MapPin.m */; };
@@ -70,6 +74,10 @@
 		A854B54A18EA04E500EAC26C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A87F100D18ED2B9A00329459 /* boner_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = boner_button.png; sourceTree = "<group>"; };
 		A87F100F18EE009600329459 /* background_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_image.png; sourceTree = "<group>"; };
+		A981559418F1C458004D45DF /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
+		A981559618F1C4BE004D45DF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A981559818F1C4C9004D45DF /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		A981559A18F1C4D1004D45DF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A9AA3BF218ED312C007F7630 /* boner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = boner.png; sourceTree = "<group>"; };
 		A9AA3BF418EE0146007F7630 /* targetInactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = targetInactive.png; sourceTree = "<group>"; };
 		A9F1357118EA785700001E6F /* MapPin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPin.h; sourceTree = "<group>"; };
@@ -82,14 +90,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A981559B18F1C4D1004D45DF /* libz.dylib in Frameworks */,
+				A981559918F1C4C9004D45DF /* libsqlite3.dylib in Frameworks */,
+				A981559718F1C4BE004D45DF /* QuartzCore.framework in Frameworks */,
+				A854B54518EA049D00EAC26C /* CoreLocation.framework in Frameworks */,
 				A854B54B18EA04E500EAC26C /* CoreData.framework in Frameworks */,
 				A854B54918EA04AC00EAC26C /* iAd.framework in Frameworks */,
-				A854B54518EA049D00EAC26C /* CoreLocation.framework in Frameworks */,
 				A854B54318EA049500EAC26C /* Social.framework in Frameworks */,
 				A854B50B18EA022300EAC26C /* CoreGraphics.framework in Frameworks */,
 				A854B50D18EA022300EAC26C /* UIKit.framework in Frameworks */,
 				A854B54118EA02A200EAC26C /* MapKit.framework in Frameworks */,
 				A854B50918EA022300EAC26C /* Foundation.framework in Frameworks */,
+				A981559518F1C458004D45DF /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +140,10 @@
 		A854B50718EA022300EAC26C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A981559A18F1C4D1004D45DF /* libz.dylib */,
+				A981559818F1C4C9004D45DF /* libsqlite3.dylib */,
+				A981559618F1C4BE004D45DF /* QuartzCore.framework */,
+				A981559418F1C458004D45DF /* Mapbox.framework */,
 				A854B54A18EA04E500EAC26C /* CoreData.framework */,
 				A854B54818EA04AC00EAC26C /* iAd.framework */,
 				A854B54618EA04A700EAC26C /* AdSupport.framework */,
@@ -288,7 +304,6 @@
 				A87F100E18ED2B9A00329459 /* boner_button.png in Resources */,
 				A87F101018EE009600329459 /* background_image.png in Resources */,
 				A9F1357618EB3E7500001E6F /* targetActive.png in Resources */,
-				A87F100C18ED175F00329459 /* background_image.jpg in Resources */,
 				A854B52418EA022300EAC26C /* Images.xcassets in Resources */,
 				A854B51318EA022300EAC26C /* InfoPlist.strings in Resources */,
 			);
@@ -432,10 +447,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: roro sman (7NJBZDCQYV)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Button/Button-Prefix.pch";
 				INFOPLIST_FILE = "Button/Button-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -448,6 +468,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Rolando Schneiderman (5V53Z3K684)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: roro sman (7NJBZDCQYV)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Button/Button-Prefix.pch";
 				INFOPLIST_FILE = "Button/Button-Info.plist";
