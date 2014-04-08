@@ -8,16 +8,18 @@
 
 #import "ButtonViewController.h"
 
-@implementation ViewController
+@implementation ViewController {
+    BOOL didCenterLocation;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setUpLocation];
     [self setUpUI];
-    [NSTimer scheduledTimerWithTimeInterval:30.0 target:self
-                                   selector:@selector(requestBoners)
-                                   userInfo:nil repeats:YES];
+    /*[NSTimer scheduledTimerWithTimeInterval:30.0 target:self
+                                   selector:@selector(requestBonersFromUserLocation)
+                                   userInfo:nil repeats:YES];*/
     
 }
 
@@ -84,16 +86,16 @@
                               context:NULL];
     [mapBorder addSubview:mapView];
     [scroll addSubview:secondView];
-    [mapView setCenterCoordinate:mapView.userLocation.location.coordinate animated:YES];
     toggleTracking=false;
     
     
     UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(gestureHandler:)];
     panGesture.edges = UIRectEdgeLeft;
     [scroll addGestureRecognizer:panGesture];
-
     
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    didCenterLocation = NO;
     
 }
 
@@ -125,9 +127,16 @@
                         change:(NSDictionary *)change
                        context:(void *)context {
     
-    if(toggleTracking==false)
-        return;
-    if ([mapView showsUserLocation]) {
+    if (!didCenterLocation){
+        MKCoordinateRegion mapRegion;
+        mapRegion.center.latitude = mapView.userLocation.coordinate.latitude;
+        mapRegion.center.longitude = mapView.userLocation.coordinate.longitude;
+        mapRegion.span.latitudeDelta = 0.1;
+        mapRegion.span.longitudeDelta = 0.1;
+        [mapView setRegion:mapRegion animated: YES];
+        didCenterLocation = YES;
+    }
+    else if (toggleTracking && [mapView showsUserLocation]) {
         CLLocationCoordinate2D noLocation = mapView.userLocation.location.coordinate;
         MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
         MKCoordinateRegion adjustedRegion = [mapView regionThatFits:viewRegion2];
@@ -206,13 +215,10 @@
 }
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)map{
-    [self requestBoners];
-    if (map.userLocation){
-        CLLocationCoordinate2D noLocation = map.userLocation.location.coordinate;
-        MKCoordinateRegion viewRegion2 = MKCoordinateRegionMake(noLocation, [mapView region].span);
-        MKCoordinateRegion adjustedRegion = [map regionThatFits:viewRegion2];
-        [map setRegion:adjustedRegion animated:YES];
-    }
+    MKCoordinateRegion region = mapView.region;
+    [self requestBonersWithLng: region.center.longitude
+                           lat: region.center.latitude
+                           rad: region.span.latitudeDelta + region.span.longitudeDelta];
 }
 
 
@@ -252,10 +258,24 @@
     [connection start];
 }
 
--(IBAction)requestBoners{
+-(IBAction)requestBonersFromUserLocation{
     float longitude = currentLocation.coordinate.longitude;
     float latitude = currentLocation.coordinate.latitude;
-    float radius = 10;
+    float radius = 1.0;
+    NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
+                        longitude,latitude, radius, identifier];
+    NSString *url = @"http://bonerbutton.com/api/getboners";
+    NSURL *serverAddr = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, params]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:serverAddr];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPMethod:@"GET"];
+    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    [connection start];
+}
+
+
+-(IBAction)requestBonersWithLng:(float)longitude lat: (float)latitude rad: (float)radius{
     NSString *identifier = [[UIDevice currentDevice].identifierForVendor UUIDString];
     NSString *params = [NSString stringWithFormat:@"lng=%f&lat=%f&rad=%f&idnum=%@",
                         longitude,latitude, radius, identifier];
