@@ -12,6 +12,7 @@
 #import <iAd/iAd.h>
 #import <MapKit/MapKit.h>
 #import "MapPin.h"
+#import <Mapbox/Mapbox.h>
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate> {
     UIButton *theButton;
